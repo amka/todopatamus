@@ -1,12 +1,24 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeController extends GetxController {
-  //TODO: Implement HomeController
+import '../../../data/core/services/storage/repository.dart';
+import '../../../data/models/task.dart';
 
-  final count = 0.obs;
+class HomeController extends GetxController {
+  TaskRepository taskRepository;
+
+  HomeController({required this.taskRepository});
+
+  final formKey = GlobalKey<FormState>();
+  final editController = TextEditingController();
+  final tasks = <Task>[].obs;
+
   @override
   void onInit() {
     super.onInit();
+
+    tasks.assignAll(taskRepository.readTasks());
+    ever(tasks, (_) => taskRepository.writeTasks(tasks));
   }
 
   @override
@@ -19,5 +31,12 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
+  bool addTask(Task task) {
+    if (tasks.contains(task)) {
+      return false;
+    }
+
+    tasks.add(task);
+    return true;
+  }
 }
