@@ -27,11 +27,15 @@ class TaskTile extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    task.title,
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                    overflow: TextOverflow.ellipsis,
+                  Tooltip(
+                    message: task.title,
+                    waitDuration: const Duration(milliseconds: 200),
+                    child: Text(
+                      task.title,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   Text(
                     '${task.todos?.length ?? 0} tasks',
