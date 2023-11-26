@@ -18,14 +18,14 @@ void main() async {
       title: "Todopatamus",
       theme: ThemeData(
         useMaterial3: true,
-        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal.shade300),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue.shade300),
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
-        // colorScheme: ColorScheme.fromSeed(
-        //   seedColor: Colors.teal.shade300,
-        //   brightness: Brightness.dark,
-        // ),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.lightBlue.shade300,
+          brightness: Brightness.dark,
+        ),
       ),
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
