@@ -3,26 +3,26 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:todopatamus/app/modules/home/widgets/task_tile.dart';
 
 import '../../../data/models/task.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
-  const HomeView({Key? key}) : super(key: key);
+  const HomeView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('HomeView'),
+        title: const Text('Tasks'),
         centerTitle: true,
       ),
       body: SafeArea(
         child: ListView(
           children: [
             const Padding(
-              padding: EdgeInsets.all(12.0),
+              padding: EdgeInsets.symmetric(horizontal: 12),
               child: Text(
                 'My List',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -35,9 +35,19 @@ class HomeView extends GetView<HomeController> {
                     .toInt(),
                 physics: const ClampingScrollPhysics(),
                 shrinkWrap: true,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 5/4,
                 padding: const EdgeInsets.all(12),
                 children: controller.tasks
-                    .map((task) => TaskTile(task: task, onLongPress: (Task task) => EasyLoading.showInfo('Task ${task.title} removed'),))
+                    .map(
+                      (task) => TaskTile(
+                        task: task,
+                        onLongPress: (Task task) => EasyLoading.showInfo(
+                          'Task ${task.title} removed',
+                        ),
+                      ),
+                    )
                     .toList(),
               ),
             ),
@@ -63,6 +73,7 @@ class HomeView extends GetView<HomeController> {
                             borderRadius: BorderRadius.circular(9)),
                         labelText: 'Title',
                       ),
+                      autofocus: true,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return 'Enter task title';
@@ -71,28 +82,39 @@ class HomeView extends GetView<HomeController> {
                       },
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (controller.formKey.currentState!.validate()) {
-                        final task = Task(
-                            title: controller.editController.text,
-                            description: '',
-                            icon: TablerIcons.tool.codePoint,
-                            color: '');
-                        Get.back();
-                        controller.addTask(task)
-                            ? EasyLoading.showSuccess(
-                                'Created task successfully')
-                            : EasyLoading.showError('Duplicated task');
-                        controller.editController.clear();
-                      }
-                    },
-                    child: const Text('Create'),
+                  const SizedBox(height: 12),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Row(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            if (controller.formKey.currentState!.validate()) {
+                              final task = Task(
+                                  title: controller.editController.text,
+                                  description: '',
+                                  icon: TablerIcons.tool.codePoint,
+                                  color: '');
+                              if (controller.addTask(task)) {
+                                EasyLoading.showSuccess(
+                                    'Created task successfully');
+                                Get.back();
+                              } else {
+                                EasyLoading.showError('Duplicated task',
+                                    duration: Duration(milliseconds: 150));
+                              }
+                            }
+                          },
+                          child: const Text('Create'),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
           );
+          controller.editController.clear();
         },
         child: const Icon(TablerIcons.plus),
       ),

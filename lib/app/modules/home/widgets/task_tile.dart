@@ -24,12 +24,21 @@ class TaskTile extends StatelessWidget {
                 TablerIcons.tools,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              Text(
-                task.title,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                overflow: TextOverflow.ellipsis,
-              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    task.title,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    '${task.todos?.length ?? 0} tasks',
+                    overflow: TextOverflow.ellipsis,
+                  )
+                ],
+              )
             ],
           ),
         ),
