@@ -41,17 +41,21 @@ class HomeView extends GetView<HomeController> {
                 padding: const EdgeInsets.all(12),
                 children: controller.tasks
                     .map(
-                      (task) => LongPressDraggable(
-                        data: task,
-                        onDragStarted: () => controller.setDeleting(true),
-                        onDraggableCanceled: (velocity, offset) =>
-                            controller.setDeleting(false),
-                        onDragCompleted: () => controller.setDeleting(false),
-                        feedback: Opacity(
-                          opacity: 0.8,
+                      (task) => GestureDetector(
+                        onTap: () => Get.toNamed('task-details',
+                            arguments: {'task': task}),
+                        child: LongPressDraggable(
+                          data: task,
+                          onDragStarted: () => controller.setDeleting(true),
+                          onDraggableCanceled: (velocity, offset) =>
+                              controller.setDeleting(false),
+                          onDragCompleted: () => controller.setDeleting(false),
+                          feedback: Opacity(
+                            opacity: 0.8,
+                            child: TaskTile(task: task),
+                          ),
                           child: TaskTile(task: task),
                         ),
-                        child: TaskTile(task: task),
                       ),
                     )
                     .toList(),
